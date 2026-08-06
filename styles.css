@@ -1,0 +1,1001 @@
+/* ==========================================================================
+   TIPOGRAFÍA Y FUENTES
+   ========================================================================== */
+@font-face {
+    font-family: "Moanas";
+    src: url("./img/Moanas.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+:root {
+    --color-oceano: #1da1b3;      /* Turquesa Moana */
+    --color-celeste: #86d6e2;     /* Celeste suave cielo */
+    --color-blanco: #ffffff;      /* Blanco */
+    --color-coral: #ff7f50;       /* Coral tropical */
+    --color-rosa-suave: #ffe4e1;  /* Rosa suave flores */
+    --color-dorado: #ebd269;      /* Dorado mágico */
+    --color-fondo-oscuro: #0a262c; /* Fondo oscuro océano nocturno */
+    --font-principal: "Moanas", Arial, sans-serif;
+    --transition-slow: 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+    --transition-mid: 0.4s ease;
+}
+
+/* ==========================================================================
+   DISEÑO BASE & RESPONSIVE CON ADAPTACIÓN ANCHA EN PC
+   ========================================================================== */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: #86d6e2;
+    font-family: var(--font-principal);
+    color: var(--color-blanco);
+    text-align: center;
+}
+
+/* Contenedor principal: En móviles ocupa pantalla vertical completa. En PC se adaptará con gran dimensión y elegancia */
+.app-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 100vh;
+    min-height: 100dvh;
+    margin: 0 auto;
+    background-color: #86d6e2;
+    overflow: hidden;
+    box-shadow: 0 0 60px rgba(0, 0, 0, 0.75);
+    transition: max-width 0.4s ease, border-radius 0.4s ease;
+}
+
+/* ==========================================================================
+   ESCENAS GENERALES (PANTALLAS)
+   ========================================================================== */
+.scene {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity var(--transition-slow), visibility var(--transition-slow);
+    z-index: 10;
+}
+
+.scene.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    z-index: 20;
+}
+
+/* Videos responsive pantalla completa */
+video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    z-index: 1;
+}
+
+/* Imagen de apertura a pantalla completa, responsiva en móvil */
+.apertura-fullscreen-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    z-index: 1;
+}
+
+/* Capas sobre los videos para legibilidad */
+.video-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.15) 100%);
+    z-index: 2;
+    pointer-events: none;
+}
+
+.video-overlay.sutil-apertura {
+    background: linear-gradient(to bottom, rgba(0,0,0,0.02) 0%, rgba(0,0,0,0.08) 100%);
+}
+
+.video-overlay.subtler {
+    background: radial-gradient(circle, rgba(0,0,0,0.02) 0%, rgba(0,0,0,0.15) 100%);
+}
+
+/* Botones de fallback o de error */
+.fallback-btn {
+    position: absolute;
+    bottom: 40px;
+    z-index: 100;
+    background: rgba(255, 127, 80, 0.95);
+    border: 2px solid var(--color-blanco);
+    color: var(--color-blanco);
+    padding: 12px 24px;
+    font-family: var(--font-principal);
+    font-size: 1rem;
+    border-radius: 30px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+    animation: pulse 2s infinite;
+}
+
+.fallback-btn.hidden {
+    display: none !important;
+}
+
+/* ==========================================================================
+   ESCENA 1 — VIDEO APERTURA & CARGANDO
+   ========================================================================== */
+#apertura {
+    background-color: #0c1a24;
+}
+
+.loader-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #0c202d;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+    transition: opacity 0.5s ease;
+}
+
+.loader-container.fade-out {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.loader-content {
+    padding: 20px;
+    animation: float 3s ease-in-out infinite;
+}
+
+.loader-spinner {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 20px auto;
+    border: 4px solid rgba(134, 214, 226, 0.2);
+    border-top: 4px solid var(--color-oceano);
+    border-radius: 50%;
+    animation: spin 1.2s linear infinite;
+}
+
+.loader-text {
+    font-family: var(--font-principal);
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+    color: var(--color-celeste);
+    text-shadow: 0 2px 10px rgba(29, 161, 179, 0.5);
+}
+
+/* Botón Abrir Invitación (se muestra sobre el vídeo apertura hacia el final) */
+.apertura-interactive-container {
+    position: relative;
+    z-index: 5;
+    width: 85%;
+    display: none; /* Ocultar botón ABRIR INVITACIÓN */
+    justify-content: center;
+    align-items: center;
+}
+
+.btn-primary {
+    position: relative;
+    background: linear-gradient(135deg, rgba(29, 161, 179, 0.85) 0%, rgba(21, 121, 136, 0.8) 100%);
+    border: 1.5px solid rgba(134, 214, 226, 0.6);
+    color: var(--color-blanco);
+    padding: 14px 32px;
+    font-family: var(--font-principal);
+    font-size: 1.25rem;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    border-radius: 35px;
+    cursor: pointer;
+    box-shadow: 0 3px 12px rgba(29, 161, 179, 0.25);
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+    opacity: 0;
+    transform: scale(0.9);
+    transition: opacity 1.5s ease, transform 1.5s ease, background 0.3s, box-shadow 0.3s;
+    overflow: hidden;
+}
+
+.btn-primary.visible {
+    opacity: 1;
+    transform: scale(1);
+    animation: float 4s ease-in-out infinite, brightnessPulse 3s infinite;
+}
+
+.btn-primary:active {
+    transform: scale(0.95);
+    box-shadow: 0 4px 10px rgba(29, 161, 179, 0.3);
+}
+
+.btn-glow {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 100%);
+    transform: skewX(-25deg);
+    animation: shineFlow 5s infinite;
+}
+
+/* ==========================================================================
+   ESCENA 2 — SEGUNDO VIDEO (HISTORIAS Y SUBTÍTULOS)
+   ========================================================================== */
+.progress-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 6px;
+    background-color: rgba(255, 255, 255, 0.15);
+    z-index: 15;
+}
+
+.progress-bar {
+    width: 0%;
+    height: 100%;
+    background-color: var(--color-oceano);
+    box-shadow: 0 0 10px var(--color-celeste);
+    transition: width 0.1s linear;
+}
+
+.audio-btn {
+    position: absolute;
+    top: 25px;
+    left: 20px;
+    z-index: 15;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1.5px solid rgba(255, 255, 255, 0.4);
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: none; /* Ocultar botón de audio */
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    transition: transform 0.2s;
+}
+
+.audio-btn:active {
+    transform: scale(0.9);
+}
+
+.audio-icon {
+    font-size: 1.2rem;
+}
+
+.skip-btn {
+    position: absolute;
+    top: 25px;
+    right: 20px;
+    z-index: 15;
+    background: rgba(255, 255, 255, 0.20);
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
+    border: 1.5px solid var(--color-blanco);
+    color: var(--color-blanco);
+    padding: 6px 14px;
+    font-size: 0.8rem;
+    border-radius: 20px;
+    cursor: pointer;
+    letter-spacing: 1.5px;
+    font-family: var(--font-principal);
+    transition: background 0.3s, transform 0.2s;
+    display: none; /* Ocultar botón saltar */
+}
+
+.skip-btn:active {
+    transform: scale(0.92);
+}
+
+.subtitles-container {
+    position: relative;
+    z-index: 3;
+    width: 80%;
+    height: 60%;
+    display: none; /* Ocultar los subtítulos HTML */
+    justify-content: center;
+    align-items: center;
+}
+
+.story-phrase {
+    position: absolute;
+    opacity: 0;
+    transition: opacity 1s ease-in-out, transform 1s ease-in-out;
+    transform: translateY(15px);
+    font-size: 2rem; /* Tamaño de letra más grande e imponente para los textos del vídeo */
+    font-family: var(--font-principal); /* Aplicando tipografía Moana explícitamente */
+    line-height: 1.4;
+    color: var(--color-blanco);
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 1), 0 0 10px rgba(29, 161, 179, 0.6); /* Sombreado pronunciado para legibilidad */
+    width: 100%;
+}
+
+.story-phrase.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.magical-text {
+    font-size: 2.3rem; /* Especialmente grande para el título del cumple de Maia */
+    color: var(--color-dorado);
+    text-shadow: 0 0 15px rgba(235, 210, 105, 0.9), 3px 3px 6px rgba(0, 0, 0, 1);
+    animation: goldShimmer 3s infinite alternate;
+}
+
+.frase-overlay-container {
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 5;
+    width: 90%;
+    max-width: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+    opacity: 1;
+    transition: opacity 0.8s ease-in-out;
+}
+
+.frase-overlay-container.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.frase-overlay-container.frase-1 {
+    animation: popInFrase 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.frase-overlay-container.frase-2 {
+    animation: fadeInFrase 0.6s ease-in-out;
+}
+
+.frase-overlay-container.frase-3 {
+    animation: fadeInFrase 0.6s ease-in-out;
+}
+
+@keyframes popInFrase {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.5);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+@keyframes fadeInFrase {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+.frase-image {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(4px 4px 10px rgba(0,0,0,0.5));
+}
+
+/* ==========================================================================
+   ESCENA 3 — INVITACIÓN FINAL (TARJETA CON FONDO-TARJETA DETRÁS)
+   ========================================================================== */
+#invitacion-final {
+    display: block;
+    background-color: var(--color-fondo-oscuro);
+}
+
+/* Contenedor deslizable de la tarjeta final */
+.scroll-container {
+    position: relative;
+    z-index: 3;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Scroll delgado móvil */
+.scroll-container::-webkit-scrollbar {
+    width: 5px;
+}
+.scroll-container::-webkit-scrollbar-track {
+    background: rgba(0,0,0,0.1);
+}
+.scroll-container::-webkit-scrollbar-thumb {
+    background: var(--color-oceano);
+    border-radius: 5px;
+}
+
+/* Utilidad para texto solo accesible a lectores de pantalla */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* ==========================================================================
+   BLOQUE HERO: FOTO PRINCIPAL + NOMBRE + CONTADOR
+   ========================================================================== */
+.invitation-hero {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    background-color: var(--color-fondo-oscuro);
+}
+
+.hero-photo-container {
+    position: relative;
+    width: 100%;
+    height: 72%;
+    overflow: hidden;
+    border-bottom-left-radius: 40px;
+    border-bottom-right-radius: 40px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.hero-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 25%;
+    display: block;
+}
+
+.hero-photo-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, rgba(10, 38, 44, 0) 0%, rgba(10, 38, 44, 0) 65%, rgba(10, 38, 44, 0.85) 100%);
+}
+
+.hero-countdown-container {
+    width: 100%;
+    height: 28%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 15px;
+    box-sizing: border-box;
+    background: radial-gradient(circle at center, #123840 0%, var(--color-fondo-oscuro) 100%);
+}
+
+.countdown-grid-layout {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: clamp(8px, 2.5vw, 16px);
+    width: 100%;
+    max-width: 480px;
+    margin: 0 auto;
+}
+
+.countdown-card-block {
+    flex: 1;
+    aspect-ratio: 0.85;
+    background: rgba(29, 161, 179, 0.14);
+    border: 2px solid rgba(134, 214, 226, 0.7);
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(6px, 1.8vw, 12px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+}
+
+.countdown-number-val {
+    font-size: clamp(1.4rem, 5.8vw, 1.9rem);
+    font-weight: bold;
+    color: #ffffff;
+    line-height: 1.1;
+}
+
+.countdown-unit-lbl {
+    font-size: clamp(0.6rem, 2.2vw, 0.72rem);
+    color: var(--color-celeste);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-top: 5px;
+}
+
+.countdown-past-msg {
+    font-size: 1.2rem;
+    color: var(--color-coral);
+    letter-spacing: 1.5px;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.hero-name-banner {
+    position: absolute;
+    top: 72%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 86%;
+    max-width: 380px;
+    height: auto;
+    z-index: 6;
+    pointer-events: none;
+}
+
+/* ==========================================================================
+   BLOQUE INFO: DATOS DEL EVENTO Y BOTONES
+   ========================================================================== */
+.invitation-details-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 18px 50px;
+    width: 100%;
+    background-image: url('./fondo-tarjeta.jpg');
+    background-size: cover;
+    background-position: center top;
+    background-repeat: no-repeat;
+    box-sizing: border-box;
+}
+
+.invitation-info-card {
+    width: 100%;
+    max-width: 560px;
+    text-align: center;
+}
+
+.details-card-header {
+    margin-bottom: 28px;
+}
+
+.details-card-badge {
+    display: inline-block;
+    background: rgba(134, 214, 226, 0.12);
+    border: 1px solid rgba(134, 214, 226, 0.4);
+    color: var(--color-celeste);
+    font-size: 0.8rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    padding: 5px 16px;
+    border-radius: 50px;
+    margin-bottom: 12px;
+}
+
+.details-title-display {
+    font-size: clamp(1.5rem, 6.5vw, 2.2rem);
+    font-weight: bold;
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.55);
+}
+
+.invitation-details-body {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 30px;
+}
+
+.info-detail-card {
+    background: rgba(29, 161, 179, 0.08);
+    border: 2px solid rgba(29, 161, 179, 0.4);
+    border-radius: 20px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    text-align: left;
+}
+
+.info-detail-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+}
+
+.info-detail-label {
+    font-size: 0.78rem;
+    color: var(--color-celeste);
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-shadow: 0 1px 5px rgba(0, 0, 0, 0.6);
+}
+
+.info-detail-value {
+    font-size: clamp(0.95rem, 4vw, 1.1rem);
+    color: #ffffff;
+    font-weight: bold;
+    line-height: 1.2;
+    text-shadow: 0 1px 5px rgba(0, 0, 0, 0.6);
+}
+
+.info-detail-subvalue {
+    font-size: 0.85rem;
+    color: #cfe9ec;
+    margin-top: 1px;
+    text-shadow: 0 1px 5px rgba(0, 0, 0, 0.6);
+}
+
+.invitation-detail-quote {
+    font-size: clamp(0.95rem, 3.8vw, 1.05rem);
+    font-style: italic;
+    color: #e5f6f8;
+    line-height: 1.5;
+    padding: 14px 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.4);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+    margin-bottom: 28px;
+    text-shadow: 0 1px 5px rgba(0, 0, 0, 0.6);
+}
+
+.details-card-footer {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: center;
+    width: 100%;
+}
+
+.details-nav-actions,
+.details-secondary-actions {
+    width: 100%;
+}
+
+/* Botones genéricos compartidos por la tarjeta */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    font-family: var(--font-principal);
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 1.05rem;
+    padding: 15px 20px;
+    box-sizing: border-box;
+    transition: transform 0.2s ease;
+}
+
+.btn-primary {
+    background: var(--color-coral);
+    color: #ffffff;
+    box-shadow: 0 6px 16px rgba(255, 127, 80, 0.35);
+}
+
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1.5px solid rgba(255, 255, 255, 0.35);
+    color: #ffffff;
+}
+
+.btn:active {
+    transform: scale(0.97);
+}
+
+/* ==========================================================================
+   MODAL CONFIRMACIÓN (RSVP)
+   ========================================================================== */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 15, 20, 0.84);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.modal-card {
+    background: #ffffff;
+    width: 90%;
+    max-width: 400px;
+    border-radius: 24px;
+    padding: 26px 20px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.55);
+    border: 3.5px solid var(--color-celeste);
+    color: #1e3a41;
+    position: relative;
+    transform: scale(0.8);
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.modal-overlay.active .modal-card {
+    transform: scale(1);
+}
+
+.modal-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(134, 214, 226, 0.2);
+    border: none;
+    font-size: 1.5rem;
+    font-weight: bold;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    color: var(--color-oceano);
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-title {
+    font-size: 1.45rem;
+    color: var(--color-oceano);
+    margin-bottom: 6px;
+    margin-top: 10px;
+}
+
+.modal-desc {
+    font-size: 0.85rem;
+    color: #62828b;
+    line-height: 1.4;
+    margin-bottom: 20px;
+}
+
+/* FORMULARIO RSVP */
+.rsvp-form {
+    text-align: left;
+}
+
+.input-group {
+    margin-bottom: 14px;
+}
+
+.input-group label {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--color-oceano);
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.input-group input[type="text"],
+.input-group select,
+.input-group textarea {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1.8px solid var(--color-celeste);
+    border-radius: 12px;
+    font-family: Arial, sans-serif;
+    font-size: 0.95rem;
+    outline: none;
+    color: #1e3a41;
+    background-color: #fafdfd;
+    transition: border-color 0.3s;
+}
+
+.input-group select {
+    font-family: var(--font-principal), Arial, sans-serif;
+    cursor: pointer;
+}
+
+.input-group input[type="text"]:focus,
+.input-group select:focus,
+.input-group textarea:focus {
+    border-color: var(--color-oceano);
+    background-color: #ffffff;
+}
+
+.form-row {
+    display: flex;
+    gap: 15px;
+}
+
+.form-row .input-group {
+    flex: 1;
+}
+
+.error-msg-box {
+    background-color: #ffeeee;
+    border: 1px solid #ffcccc;
+    color: #ff3333;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 0.8rem;
+    margin-bottom: 15px;
+    line-height: 1.4;
+}
+
+.error-msg-box.hidden {
+    display: none !important;
+}
+
+.btn-submit {
+    width: 100%;
+    background: linear-gradient(135deg, rgba(29, 161, 179, 0.8) 0%, rgba(23, 142, 159, 0.75) 100%);
+    border: 1px solid rgba(134, 214, 226, 0.5);
+    color: var(--color-blanco);
+    padding: 13px 18px;
+    border-radius: 25px;
+    font-family: var(--font-principal);
+    font-size: 1.05rem;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(29, 161, 179, 0.15);
+    transition: 0.3s;
+    margin-top: 5px;
+}
+
+.btn-submit:active {
+    transform: scale(0.98);
+    box-shadow: 0 1px 4px rgba(29, 161, 179, 0.08);
+}
+
+
+/* ==========================================================================
+   DISEÑO EXCLUSIVO DE PC (Y TABLETS HORIZONTALES)
+   ========================================================================== */
+@media screen and (min-width: 768px) {
+    /* En PC, se amplia lateralmente para que se vea ESPECTACULAR, GRANDE, completo e imponente */
+    .app-container {
+        max-width: 900px; /* Ancho cómodo en computadora de escritorio */
+        border-radius: 20px;
+        height: 90dvh;
+        min-height: 90dvh;
+        align-self: center;
+        top: 5dvh;
+        box-shadow: 0 20px 80px rgba(0, 0, 0, 0.85);
+        border: 4px solid rgba(255,255,255,0.06);
+    }
+
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: radial-gradient(circle, #0e2731 0%, #050f16 100%);
+    }
+
+    /* Las escenas se ajustan para encajar elegantemente en el viewport redimensionado */
+    .scene {
+        min-height: 90dvh;
+    }
+
+    /* Ajuste de frases de historia en pantallas anchas (más grandes y elegantes) */
+    .story-phrase {
+        font-size: 2.4rem;
+    }
+    .magical-text {
+        font-size: 2.8rem;
+    }
+
+    /* En pantallas anchas, la tarjeta se mantiene centrada con un ancho tipo "celular" prolijo */
+    .invitation-hero,
+    .invitation-details-area {
+        max-width: 480px;
+        margin: 0 auto;
+    }
+
+    .invitation-info-card {
+        max-width: 480px;
+    }
+}
+
+
+/* ==========================================================================
+   ANIMACIONES CSS
+   ========================================================================== */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.04); opacity: 0.9; }
+}
+
+@keyframes brightnessPulse {
+    0%, 100% { filter: brightness(1); }
+    50% { filter: brightness(1.15); }
+}
+
+@keyframes shineFlow {
+    0% { left: -100%; }
+    20% { left: 150%; }
+    100% { left: 150%; }
+}
+
+@keyframes goldShimmer {
+    0% { text-shadow: 0 0 10px rgba(235, 210, 105, 0.7), 2px 2px 4px rgba(0,0,0,0.8); }
+    100% { text-shadow: 0 0 20px rgba(235, 210, 105, 1), 0 0 30px rgba(235, 210, 105, 0.6), 2px 2px 4px rgba(0,0,0,0.8); }
+}
+
+/* ==========================================================================
+   MEDIDAS PREFIEREN SIN ANIMACIONES (ACCESIBILIDAD)
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+    *, ::before, ::after {
+        animation-delay: -1ms !important;
+        animation-duration: 1ms !important;
+        animation-iteration-count: 1 !important;
+        background-attachment: initial !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0s !important;
+        transition-delay: 0s !important;
+    }
+}

@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invitación al Cumpleaños de Maia</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- CONTENEDOR PRINCIPAL -->
+    <main class="app-container">
+
+        <!-- ======================================== -->
+        <!-- ESCENA 1 — VIDEO APERTURA -->
+        <!-- ======================================== -->
+        <section id="apertura" class="scene active" aria-live="polite">
+            <div id="loader-apertura" class="loader-container">
+                <div class="loader-content">
+                    <div class="loader-spinner"></div>
+                    <p class="loader-text">PREPARANDO UNA AVENTURA MÁGICA...</p>
+                </div>
+            </div>
+            
+            <img id="imagen-apertura"
+                 class="apertura-fullscreen-img"
+                 src="./imagen-apertura.jpeg"
+                 alt=""
+                 aria-hidden="true">
+
+            <!-- Capa de gradiente sutil para mejorar la legibilidad sobre el video -->
+            <div class="video-overlay sutil-apertura"></div>
+
+            <!-- El botón para abrir la invitación se muestra sobre el vídeo de apertura hacia el final -->
+            <div class="apertura-interactive-container">
+                <button id="btn-abrir-invitacion" class="btn-primary hidden" type="button" aria-label="Abrir invitación de cumpleaños de Maia">
+                    <span>ABRIR INVITACIÓN</span>
+                    <span class="btn-glow"></span>
+                </button>
+            </div>
+
+            <!-- Botón de fallback por si falla o demora el video -->
+            <button id="btn-fallback-apertura" class="fallback-btn hidden" type="button">
+                Entrar a la Aventura &rarr;
+            </button>
+        </section>
+
+
+        <!-- ======================================== -->
+        <!-- ESCENA 2 — SEGUNDO VIDEO (HISTORIA) -->
+        <!-- ======================================== -->
+        <section id="historia" class="scene">
+            <!-- Barra de progreso superior -->
+            <div class="progress-container" aria-hidden="true">
+                <div id="progress-bar" class="progress-bar"></div>
+            </div>
+
+            <video id="video-historia" 
+                   playsinline 
+                   preload="metadata" 
+                   src="./segundo-video.mp4" 
+                   type="video/mp4"
+                   aria-hidden="true">
+            </video>
+
+            <!-- Capa de sombra para lecturas de subtítulos -->
+            <div class="video-overlay subtler"></div>
+
+            <!-- Imagen de la primera frase sobre el video -->
+            <div class="frase-overlay-container frase-1" id="frase-1-container">
+                <img src="./primera frase.png" alt="Primera frase" class="frase-image">
+            </div>
+
+            <!-- Imagen de la segunda frase sobre el video -->
+            <div class="frase-overlay-container frase-2 hidden" id="frase-2-container">
+                <img src="./seg-frase.png" alt="Segunda frase" class="frase-image">
+            </div>
+
+            <!-- Imagen de la tercera frase sobre el video -->
+            <div class="frase-overlay-container frase-3 hidden" id="frase-3-container">
+                <img src="./tercera-frase.png" alt="Tercera frase" class="frase-image">
+            </div>
+
+            <!-- Botón de sonido táctil móvil -->
+            <button id="btn-audio-toggle" class="audio-btn" type="button" aria-label="Activar o desactivar sonido">
+                <span id="audio-icon" class="audio-icon">🔇</span>
+            </button>
+
+            <!-- Botón Saltar -->
+            <button id="btn-saltar" class="skip-btn" type="button" aria-label="Saltar video de la historia">
+                SALTAR
+            </button>
+
+            <!-- Subtítulos sincronizados HTML colocados sobre el video -->
+            <div class="subtitles-container" aria-live="polite">
+                <p id="phrase-1" class="story-phrase">El océano te llamó...</p>
+                <p id="phrase-2" class="story-phrase">Para vivir una aventura muy especial</p>
+                <p id="phrase-3" class="story-phrase magical-text">La princesa Maia está cumpliendo 4 años</p>
+            </div>
+
+            <!-- Botón de fallback por si falla el video -->
+            <button id="btn-fallback-historia" class="fallback-btn hidden" type="button">
+                Ir a la Tarjeta &rarr;
+            </button>
+        </section>
+
+
+        <!-- ======================================== -->
+        <!-- ESCENA 3 — INVITACIÓN FINAL (CON FONDO-TARJETA) -->
+        <!-- ======================================== -->
+        <section id="invitacion-final" class="scene">
+
+            <!-- Contenedor desplazable de la tarjeta final -->
+            <div class="scroll-container">
+
+                <!-- BLOQUE HERO: foto de Maia como Moana + nombre + contador -->
+                <div class="invitation-hero">
+                    <div class="hero-photo-container">
+                        <img class="hero-photo" src="./hero-tarjeta.jpg" alt="Maia como princesa de Moana en la playa">
+                        <div class="hero-photo-overlay"></div>
+                    </div>
+
+                    <!-- Nombre de Maia superpuesto sobre el borde inferior de la foto -->
+                    <img src="./imagen-sobre-el-hero.png" alt="Maia" class="hero-name-banner">
+
+                    <!-- CONTADOR REGRESIVO -->
+                    <section class="hero-countdown-container" aria-labelledby="countdown-heading">
+                        <h2 id="countdown-heading" class="sr-only">Cuenta regresiva para la fiesta</h2>
+                        <div id="countdown-wrapper" class="countdown-grid-layout">
+                            <div class="countdown-card-block">
+                                <span id="days" class="countdown-number-val">00</span>
+                                <span class="countdown-unit-lbl">Días</span>
+                            </div>
+                            <div class="countdown-card-block">
+                                <span id="hours" class="countdown-number-val">00</span>
+                                <span class="countdown-unit-lbl">Horas</span>
+                            </div>
+                            <div class="countdown-card-block">
+                                <span id="minutes" class="countdown-number-val">00</span>
+                                <span class="countdown-unit-lbl">Minutos</span>
+                            </div>
+                            <div class="countdown-card-block">
+                                <span id="seconds" class="countdown-number-val">00</span>
+                                <span class="countdown-unit-lbl">Segundos</span>
+                            </div>
+                        </div>
+                        <p id="countdown-today" class="countdown-past-msg hidden">¡Hoy es el gran día!</p>
+                    </section>
+                </div>
+
+                <!-- BLOQUE INFO: datos del evento, frase y botones -->
+                <div class="invitation-details-area">
+                    <article class="invitation-info-card">
+                        <header class="details-card-header">
+                            <span class="details-card-badge">Cumpleaños de Maia</span>
+                            <h2 class="details-title-display">Información del evento</h2>
+                        </header>
+
+                        <div class="invitation-details-body">
+                            <div class="info-detail-card">
+                                <div class="info-detail-text">
+                                    <span class="info-detail-label">Cuándo</span>
+                                    <span class="info-detail-value">Domingo 30 de agosto de 2026</span>
+                                </div>
+                            </div>
+
+                            <div class="info-detail-card">
+                                <div class="info-detail-text">
+                                    <span class="info-detail-label">Horario</span>
+                                    <span class="info-detail-value">De 14:00 a 17:00 hs</span>
+                                </div>
+                            </div>
+
+                            <div class="info-detail-card">
+                                <div class="info-detail-text">
+                                    <span class="info-detail-label">Dónde</span>
+                                    <span class="info-detail-value">América Eventos</span>
+                                    <span class="info-detail-subvalue">Martín Rodríguez 1421, Banfield</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <p class="invitation-detail-quote">Acompañanos a celebrar los 4 años de la princesa Maia</p>
+
+                        <footer class="details-card-footer">
+                            <div class="details-nav-actions">
+                                <button id="btn-abrir-rsvp" class="btn btn-primary" type="button" aria-haspopup="dialog" aria-controls="modal-rsvp">
+                                    Confirmar asistencia
+                                </button>
+                            </div>
+                            <div class="details-secondary-actions">
+                                <a href="https://www.google.com/maps/search/?api=1&query=Mart%C3%ADn+Rodr%C3%ADguez+1421%2C+Banfield%2C+Buenos+Aires"
+                                   target="_blank"
+                                   rel="noopener noreferrer"
+                                   class="btn btn-secondary"
+                                   role="button">
+                                    Cómo llegar
+                                </a>
+                            </div>
+                        </footer>
+                    </article>
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- ======================================== -->
+        <!-- MODAL CONFIRMACIÓN DE ASISTENCIA -->
+        <!-- ======================================== -->
+        <div id="modal-rsvp" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+            <div class="modal-card">
+                <!-- Botón Cerrar (Esquina) -->
+                <button id="btn-cerrar-rsvp" class="modal-close" type="button" aria-label="Cerrar ventana de confirmación">&times;</button>
+                
+                <h2 id="modal-title" class="modal-title">Confirmar Asistencia</h2>
+                <p class="modal-desc">Por favor completá los datos para agendar tu asistencia al cumple de Maia.</p>
+
+                <!-- Formulario -->
+                <form id="rsvp-form" class="rsvp-form">
+                    <div class="input-group">
+                        <label for="rsvp-name">Nombre del Invitado / Familia:</label>
+                        <input type="text" id="rsvp-name" name="name" placeholder="Ej: Familia Gómez" required max="60">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="input-group">
+                            <label for="rsvp-adults">Adultos:</label>
+                            <select id="rsvp-adults" name="adults" required>
+                                <option value="0">0</option>
+                                <option value="1" selected>1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                            </select>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="rsvp-kids">Niños:</label>
+                            <select id="rsvp-kids" name="kids" required>
+                                <option value="0" selected>0</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="rsvp-message">Mensaje Especial (Opcional):</label>
+                        <textarea id="rsvp-message" name="message" rows="3" placeholder="Ej: ¡Muchas gracias por la invitación!"></textarea>
+                    </div>
+
+                    <!-- Mensaje de error para Whatsapp no configurado -->
+                    <div id="whatsapp-error-msg" class="error-msg-box hidden">
+                        ⚠️ Falta configurar el número de WhatsApp en script.js
+                    </div>
+
+                    <button id="btn-enviar-rsvp" class="btn-submit" type="submit">
+                        <span>💬 ENVIAR CONFIRMACIÓN</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
