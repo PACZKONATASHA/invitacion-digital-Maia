@@ -78,8 +78,6 @@ function showScene(sceneElement) {
 // ==========================================================================
 // ESCENA 1 - APERTURA CON IMAGEN A PANTALLA COMPLETA
 // ==========================================================================
-const DURACION_APERTURA_MS = 2800; // Tiempo que se muestra la imagen antes de avanzar solo
-
 function initOpeningScene() {
     let avanzado = false;
     const avanzarUnaVez = () => {
@@ -88,10 +86,9 @@ function initOpeningScene() {
         transitionToScene2();
     };
 
-    // Cuando la imagen carga, ocultamos el loader y programamos el avance automático
+    // Cuando la imagen carga, ocultamos el loader. El avance solo ocurre al presionar el botón.
     const onImagenLista = () => {
         loaderApertura.classList.add("fade-out");
-        setTimeout(avanzarUnaVez, DURACION_APERTURA_MS);
     };
 
     if (imagenApertura.complete && imagenApertura.naturalWidth > 0) {
