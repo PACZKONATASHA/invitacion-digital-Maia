@@ -240,7 +240,7 @@ video {
     align-items: center;
 }
 
-.btn-primary {
+.btn-apertura {
     position: relative;
     background: linear-gradient(135deg, rgba(134, 214, 226, 0.5) 0%, rgba(29, 161, 179, 0.35) 100%);
     backdrop-filter: blur(2px);
@@ -261,13 +261,13 @@ video {
     overflow: hidden;
 }
 
-.btn-primary.visible {
+.btn-apertura.visible {
     opacity: 1;
     transform: scale(1);
     animation: float 4s ease-in-out infinite, brightnessPulse 4s infinite;
 }
 
-.btn-primary:active {
+.btn-apertura:active {
     transform: scale(0.96);
     box-shadow: 0 3px 8px rgba(10, 38, 44, 0.25);
 }
