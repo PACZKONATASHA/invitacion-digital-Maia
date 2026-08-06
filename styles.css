@@ -109,6 +109,33 @@ video {
     z-index: 1;
 }
 
+/* Número 5 apareciendo desde abajo en la imagen de apertura */
+.numero-cinco-flotante {
+    position: absolute;
+    left: 50%;
+    bottom: 12%;
+    width: 62%;
+    max-width: 380px;
+    transform: translateX(-50%) translateY(40px);
+    z-index: 3;
+    filter: drop-shadow(0 8px 18px rgba(0, 40, 60, 0.45));
+    animation: aparecer-arriba 1.2s ease-out forwards;
+    animation-delay: 0.3s;
+    opacity: 0;
+    pointer-events: none;
+}
+
+@keyframes aparecer-arriba {
+    0% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(40px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
 /* Capas sobre los videos para legibilidad */
 .video-overlay {
     position: absolute;
