@@ -34,10 +34,8 @@ const loaderApertura = document.getElementById("loader-apertura");
 const btnAbrirInvitacion = document.getElementById("btn-abrir-invitacion");
 const btnFallbackApertura = document.getElementById("btn-fallback-apertura");
 
-// Audio de fondo (suena en loop durante toda la tarjeta)
+// Audio de fondo (suena en loop durante toda la tarjeta, sin botón para apagarla)
 const audioFondo = document.getElementById("audio-fondo");
-const btnMusicaToggle = document.getElementById("btn-musica-toggle");
-const musicaIcon = document.getElementById("musica-icon");
 
 // Elementos de la Escena 2 (Historia)
 const progressBar = document.getElementById("progress-bar");
@@ -149,7 +147,6 @@ function iniciarMusicaFondo() {
             });
         }
     }
-    btnMusicaToggle.classList.remove("hidden");
 }
 
 function activarSonido() {
@@ -162,27 +159,10 @@ function activarSonido() {
 }
 
 // Se activa el sonido en cuanto ocurra CUALQUIER interacción en la página
-// (no hace falta tocar un botón específico).
+// (no hace falta tocar un botón específico). No hay botón para volver a
+// silenciarla: la música suena durante toda la tarjeta.
 ["pointerdown", "click", "touchend", "keydown"].forEach(evt => {
     document.addEventListener(evt, activarSonido, { passive: true });
-});
-
-// El ícono del botón siempre refleja el estado real del audio: suena solo si
-// no está pausado NI silenciado.
-function actualizarIconoMusica() {
-    musicaIcon.textContent = (audioFondo.paused || audioFondo.muted) ? "🔇" : "🔊";
-}
-audioFondo.addEventListener("play", actualizarIconoMusica);
-audioFondo.addEventListener("pause", actualizarIconoMusica);
-audioFondo.addEventListener("volumechange", actualizarIconoMusica);
-
-btnMusicaToggle.addEventListener("click", () => {
-    if (audioFondo.paused) {
-        audioFondo.muted = false;
-        audioFondo.play().catch(() => {});
-    } else {
-        audioFondo.muted = !audioFondo.muted;
-    }
 });
 
 
