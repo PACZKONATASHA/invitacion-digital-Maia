@@ -126,7 +126,7 @@ function transitionToScene2() {
 
 
 // ==========================================================================
-// MÚSICA DE FONDO (SUENA EN LOOP DESDE QUE SE ABRE LA INVITACIÓN)
+// MÚSICA DE FONDO (SUENA EN LOOP DESDE QUE SE LLEGA A LA TARJETA FINAL)
 // ==========================================================================
 function iniciarMusicaFondo() {
     audioFondo.volume = 0.55;
