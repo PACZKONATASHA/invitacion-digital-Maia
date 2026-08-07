@@ -109,13 +109,13 @@ video {
     z-index: 1;
 }
 
-/* Número 5 apareciendo de repente, grande, ubicado sobre la franja de agua de la imagen */
+/* Número 5 apareciendo de repente, bien grande y centrado, sobre la franja de agua de la imagen */
 .numero-cinco-flotante {
     position: absolute;
-    left: 62%;
-    bottom: 26%;
-    width: 38%;
-    max-width: 210px;
+    left: 50%;
+    bottom: 32%;
+    width: 40%;
+    max-width: 225px;
     transform: translateX(-50%) scale(0.4);
     z-index: 3;
     filter: drop-shadow(0 8px 18px rgba(0, 40, 60, 0.45));
@@ -125,13 +125,13 @@ video {
     pointer-events: none;
 }
 
-/* Nombre "Maia" apareciendo de repente justo debajo del número 5, sin tapar a la gallina */
+/* Nombre "Maia" apareciendo de repente bien grande, al lado de la gallina (a su altura), sin taparla */
 .nombre-maia-flotante {
     position: absolute;
-    left: 62%;
-    bottom: 13%;
-    width: 40%;
-    max-width: 190px;
+    left: 74%;
+    bottom: 12%;
+    width: 52%;
+    max-width: 250px;
     transform: translateX(-50%) scale(0.4);
     z-index: 3;
     filter: drop-shadow(0 8px 18px rgba(0, 40, 60, 0.45));
