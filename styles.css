@@ -109,46 +109,50 @@ video {
     z-index: 1;
 }
 
-/* Número 5 apareciendo desde abajo en la imagen de apertura */
+/* Número 5 apareciendo de repente, con protagonismo, en la imagen de apertura */
 .numero-cinco-flotante {
     position: absolute;
     left: 50%;
-    bottom: 42%;
-    width: 26%;
-    max-width: 155px;
-    transform: translateX(-50%) translateY(40px);
+    bottom: 44%;
+    width: 46%;
+    max-width: 260px;
+    transform: translateX(-50%) scale(0.4);
     z-index: 3;
     filter: drop-shadow(0 8px 18px rgba(0, 40, 60, 0.45));
-    animation: aparecer-arriba 1.2s ease-out forwards;
+    animation: aparecer-de-repente 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
     animation-delay: 0.3s;
     opacity: 0;
     pointer-events: none;
 }
 
-/* Nombre "Maia" apareciendo sobre la arena, debajo del número */
+/* Nombre "Maia" apareciendo de repente sobre la arena, con protagonismo */
 .nombre-maia-flotante {
     position: absolute;
     left: 50%;
-    bottom: 19%;
-    width: 68%;
-    max-width: 300px;
-    transform: translateX(-50%) translateY(40px);
+    bottom: 16%;
+    width: 86%;
+    max-width: 380px;
+    transform: translateX(-50%) scale(0.4);
     z-index: 3;
     filter: drop-shadow(0 8px 18px rgba(0, 40, 60, 0.45));
-    animation: aparecer-arriba 1.2s ease-out forwards;
-    animation-delay: 0.6s;
+    animation: aparecer-de-repente 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    animation-delay: 0.55s;
     opacity: 0;
     pointer-events: none;
 }
 
-@keyframes aparecer-arriba {
+@keyframes aparecer-de-repente {
     0% {
         opacity: 0;
-        transform: translateX(-50%) translateY(40px);
+        transform: translateX(-50%) scale(0.4);
+    }
+    60% {
+        opacity: 1;
+        transform: translateX(-50%) scale(1.1);
     }
     100% {
         opacity: 1;
-        transform: translateX(-50%) translateY(0);
+        transform: translateX(-50%) scale(1);
     }
 }
 

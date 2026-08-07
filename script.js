@@ -88,6 +88,7 @@ function initOpeningScene() {
     const avanzarUnaVez = () => {
         if (avanzado) return;
         avanzado = true;
+        iniciarMusicaFondo();
         transitionToScene2();
     };
 
@@ -126,7 +127,7 @@ function transitionToScene2() {
 
 
 // ==========================================================================
-// MÚSICA DE FONDO (SUENA EN LOOP DESDE QUE SE LLEGA A LA TARJETA FINAL)
+// MÚSICA DE FONDO (SUENA EN LOOP DESDE QUE SE ABRE LA INVITACIÓN EN LA ESCENA 1)
 // ==========================================================================
 function iniciarMusicaFondo() {
     audioFondo.volume = 0.55;
@@ -254,7 +255,6 @@ function syncSubtitles(currentTime) {
 
 function transitionToScene3() {
     videoHistoria.pause();
-    iniciarMusicaFondo();
     initScene3();
 }
 
