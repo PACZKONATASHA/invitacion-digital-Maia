@@ -88,6 +88,7 @@ function initOpeningScene() {
     const avanzarUnaVez = () => {
         if (avanzado) return;
         avanzado = true;
+        audioFondo.currentTime = 0;
         activarSonido();
         transitionToScene2();
     };
