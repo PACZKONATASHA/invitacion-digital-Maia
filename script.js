@@ -132,46 +132,56 @@ function transitionToScene2() {
 // ==========================================================================
 // MÚSICA DE FONDO (SUENA EN LOOP DESDE QUE SE ABRE LA INVITACIÓN EN LA ESCENA 1)
 // ==========================================================================
-let aperturaConfirmada = false; // true en cuanto el usuario toca "Abrir invitación"
-
+// Los navegadores nunca permiten arrancar audio CON sonido sin que haya habido
+// antes alguna interacción del usuario con la página (política anti-spam de todos
+// los navegadores, no depende de este sitio). Lo más automático posible es:
+// arrancar la música silenciada apenas carga la imagen de apertura (el autoplay
+// silenciado sí está siempre permitido) y activar el sonido apenas ocurra
+// cualquier interacción, sin importar dónde se toque.
 function iniciarMusicaFondo() {
-    aperturaConfirmada = true;
     audioFondo.volume = 0.55;
-    intentarReproducirMusica();
+    if (audioFondo.paused) {
+        audioFondo.muted = true;
+        const playPromise = audioFondo.play();
+        if (playPromise !== undefined) {
+            playPromise.catch(error => {
+                console.warn("No se pudo iniciar la música ni siquiera silenciada:", error);
+            });
+        }
+    }
     btnMusicaToggle.classList.remove("hidden");
 }
 
-function intentarReproducirMusica() {
-    if (!aperturaConfirmada || !audioFondo.paused) return;
-    const playPromise = audioFondo.play();
-    if (playPromise !== undefined) {
-        playPromise.catch(error => {
-            console.warn("Reproducción de música de fondo bloqueada, se reintentará con la próxima interacción:", error);
+function activarSonido() {
+    if (audioFondo.paused) {
+        audioFondo.play().catch(error => {
+            console.warn("Reproducción de música bloqueada, se reintentará con la próxima interacción:", error);
         });
     }
+    audioFondo.muted = false;
 }
 
-// Red de seguridad: si el navegador bloqueó el primer intento de reproducción
-// (por ejemplo dentro de vistas previas embebidas con políticas de autoplay más estrictas),
-// se reintenta apenas ocurra cualquier otra interacción del usuario en la página.
+// Se activa el sonido en cuanto ocurra CUALQUIER interacción en la página
+// (no hace falta tocar un botón específico).
 ["pointerdown", "click", "touchend", "keydown"].forEach(evt => {
-    document.addEventListener(evt, intentarReproducirMusica, { passive: true });
+    document.addEventListener(evt, activarSonido, { passive: true });
 });
 
-// El ícono del botón siempre refleja el estado real del audio (no un estado fijo),
-// así nunca queda desincronizado si el navegador demora o bloquea el autoplay.
-audioFondo.addEventListener("play", () => {
-    musicaIcon.textContent = "🔊";
-});
-audioFondo.addEventListener("pause", () => {
-    musicaIcon.textContent = "🔇";
-});
+// El ícono del botón siempre refleja el estado real del audio: suena solo si
+// no está pausado NI silenciado.
+function actualizarIconoMusica() {
+    musicaIcon.textContent = (audioFondo.paused || audioFondo.muted) ? "🔇" : "🔊";
+}
+audioFondo.addEventListener("play", actualizarIconoMusica);
+audioFondo.addEventListener("pause", actualizarIconoMusica);
+audioFondo.addEventListener("volumechange", actualizarIconoMusica);
 
 btnMusicaToggle.addEventListener("click", () => {
     if (audioFondo.paused) {
-        audioFondo.play();
+        audioFondo.muted = false;
+        audioFondo.play().catch(() => {});
     } else {
-        audioFondo.pause();
+        audioFondo.muted = !audioFondo.muted;
     }
 });
 

@@ -11,8 +11,13 @@
     <!-- CONTENEDOR PRINCIPAL -->
     <main class="app-container">
 
-        <!-- Audio de fondo (arranca al abrir la invitación, en la escena 1) -->
-        <audio id="audio-fondo" src="./img/cancion-fondo.mp3" loop preload="auto"></audio>
+        <!-- Audio de fondo: se usa un <video> silenciado en vez de <audio> porque los
+             navegadores permiten el autoplay silenciado de video sin ninguna interacción
+             previa del usuario (no así con <audio>). El archivo es la misma canción con
+             una pista de video negra de 2x2px. Arranca ya en la escena 1 y se activa el
+             sonido con la primera interacción del usuario en la página (ver script.js). -->
+        <video id="audio-fondo" class="audio-fondo-oculto" src="./img/cancion-fondo.mp4"
+               muted autoplay loop playsinline preload="auto" aria-hidden="true"></video>
 
         <!-- Botón global de silenciar/activar música de fondo -->
         <button id="btn-musica-toggle" class="musica-btn hidden" type="button" aria-label="Silenciar o activar la música de fondo">

@@ -176,6 +176,19 @@ video {
     background: radial-gradient(circle, rgba(0,0,0,0.02) 0%, rgba(0,0,0,0.15) 100%);
 }
 
+/* Video que transporta la música de fondo: invisible pero renderizado (display:none
+   haría que algunos navegadores lo pausen por no estar "visible"). */
+.audio-fondo-oculto {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+    z-index: -1;
+}
+
 /* Botón global de música de fondo, visible en todas las escenas */
 .musica-btn {
     position: absolute;
