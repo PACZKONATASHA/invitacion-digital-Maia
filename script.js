@@ -92,9 +92,12 @@ function initOpeningScene() {
         transitionToScene2();
     };
 
-    // Cuando la imagen carga, ocultamos el loader. El avance solo ocurre al presionar el botón.
+    // Cuando la imagen carga, ocultamos el loader y arrancamos la música ahí mismo
+    // (en la escena 1, junto con la imagen de apertura). El avance de escena solo
+    // ocurre al presionar el botón.
     const onImagenLista = () => {
         loaderApertura.classList.add("fade-out");
+        iniciarMusicaFondo();
     };
 
     if (imagenApertura.complete && imagenApertura.naturalWidth > 0) {
