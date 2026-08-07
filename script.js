@@ -88,7 +88,6 @@ function initOpeningScene() {
     const avanzarUnaVez = () => {
         if (avanzado) return;
         avanzado = true;
-        iniciarMusicaFondo();
         transitionToScene2();
     };
 
@@ -255,6 +254,7 @@ function syncSubtitles(currentTime) {
 
 function transitionToScene3() {
     videoHistoria.pause();
+    iniciarMusicaFondo();
     initScene3();
 }
 
