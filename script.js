@@ -88,7 +88,7 @@ function initOpeningScene() {
     const avanzarUnaVez = () => {
         if (avanzado) return;
         avanzado = true;
-        iniciarMusicaFondo();
+        activarSonido();
         transitionToScene2();
     };
 
@@ -134,10 +134,10 @@ function transitionToScene2() {
 // ==========================================================================
 // Los navegadores nunca permiten arrancar audio CON sonido sin que haya habido
 // antes alguna interacción del usuario con la página (política anti-spam de todos
-// los navegadores, no depende de este sitio). Lo más automático posible es:
-// arrancar la música silenciada apenas carga la imagen de apertura (el autoplay
-// silenciado sí está siempre permitido) y activar el sonido apenas ocurra
-// cualquier interacción, sin importar dónde se toque.
+// los navegadores, no depende de este sitio). Por eso: la música arranca
+// silenciada apenas carga la imagen de apertura (el autoplay silenciado sí
+// está siempre permitido) y el sonido se activa al 100% justo cuando se toca
+// el botón "ABRIR INVITACIÓN" (ver avanzarUnaVez en initOpeningScene).
 function iniciarMusicaFondo() {
     audioFondo.volume = 1;
     if (audioFondo.paused) {
@@ -193,12 +193,6 @@ function activarSonido() {
     }
     audioFondo.muted = false;
 }
-
-// Se activa el sonido en cuanto ocurra CUALQUIER interacción en la página
-// (no hace falta tocar un botón específico).
-["pointerdown", "click", "touchend", "keydown"].forEach(evt => {
-    document.addEventListener(evt, activarSonido, { passive: true });
-});
 
 // El ícono del botón siempre refleja el estado real del audio: suena solo si
 // no está pausado NI silenciado.
