@@ -678,7 +678,7 @@ video {
     align-items: center;
     padding: 40px 18px 50px;
     width: 100%;
-    background-image: url('./img/fondo-tarjeta.jpg');
+    background-image: url('./img/img-info-tarjeta.jpg');
     background-size: cover;
     background-position: center top;
     background-repeat: no-repeat;
@@ -814,15 +814,17 @@ video {
 }
 
 .btn-primary {
-    background: var(--color-coral);
+    background: linear-gradient(135deg, rgba(86, 190, 214, 0.9) 0%, rgba(21, 121, 136, 0.85) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.6);
     color: #ffffff;
-    box-shadow: 0 6px 16px rgba(255, 127, 80, 0.35);
+    box-shadow: 0 6px 16px rgba(29, 161, 179, 0.45);
 }
 
 .btn-secondary {
-    background: rgba(255, 255, 255, 0.08);
-    border: 1.5px solid rgba(255, 255, 255, 0.35);
+    background: linear-gradient(135deg, rgba(86, 190, 214, 0.75) 0%, rgba(21, 121, 136, 0.65) 100%);
+    border: 1.5px solid rgba(255, 255, 255, 0.5);
     color: #ffffff;
+    box-shadow: 0 4px 14px rgba(29, 161, 179, 0.35);
 }
 
 .btn:active {

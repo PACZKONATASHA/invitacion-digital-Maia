@@ -12,7 +12,7 @@
 // Debe incluir el código de país (54 para Argentina), el prefijo móvil (9),
 // y el número de teléfono con código de área, sin espacios, guiones ni el símbolo "+".
 // Ejemplo para Argentina, CABA: "5491155556666" o Provincia: "5492214445555"
-const WHATSAPP_NUMBER = "54911XXXXXXXX"; 
+const WHATSAPP_NUMBER = "5491164272357";
 
 
 // ==========================================================================
