@@ -11,6 +11,14 @@
     <!-- CONTENEDOR PRINCIPAL -->
     <main class="app-container">
 
+        <!-- Audio de fondo de toda la tarjeta (arranca al abrir la invitación) -->
+        <audio id="audio-fondo" src="./img/cancion-fondo.mp3" loop preload="auto"></audio>
+
+        <!-- Botón global de silenciar/activar música de fondo -->
+        <button id="btn-musica-toggle" class="musica-btn hidden" type="button" aria-label="Silenciar o activar la música de fondo">
+            <span id="musica-icon" class="musica-icon">🔊</span>
+        </button>
+
         <!-- ======================================== -->
         <!-- ESCENA 1 — VIDEO APERTURA -->
         <!-- ======================================== -->
@@ -32,6 +40,12 @@
                  class="numero-cinco-flotante"
                  src="./img/numero-cinco.png"
                  alt=""
+                 aria-hidden="true">
+
+            <img id="nombre-maia-apertura"
+                 class="nombre-maia-flotante"
+                 src="./img/nombre-maia.png"
+                 alt="Maia"
                  aria-hidden="true">
 
             <!-- Capa de gradiente sutil para mejorar la legibilidad sobre el video -->
@@ -64,7 +78,7 @@
             <video id="video-historia" 
                    playsinline 
                    preload="metadata" 
-                   src="./segundo-video.mp4" 
+                   src="./img/segundo-video.mp4"
                    type="video/mp4"
                    aria-hidden="true">
             </video>
@@ -74,17 +88,17 @@
 
             <!-- Imagen de la primera frase sobre el video -->
             <div class="frase-overlay-container frase-1" id="frase-1-container">
-                <img src="./primera frase.png" alt="Primera frase" class="frase-image">
+                <img src="./img/primera frase.png" alt="Primera frase" class="frase-image">
             </div>
 
             <!-- Imagen de la segunda frase sobre el video -->
             <div class="frase-overlay-container frase-2 hidden" id="frase-2-container">
-                <img src="./seg-frase.png" alt="Segunda frase" class="frase-image">
+                <img src="./img/seg-frase.png" alt="Segunda frase" class="frase-image">
             </div>
 
             <!-- Imagen de la tercera frase sobre el video -->
             <div class="frase-overlay-container frase-3 hidden" id="frase-3-container">
-                <img src="./tercera-frase.png" alt="Tercera frase" class="frase-image">
+                <img src="./img/tercera-frase.png" alt="Tercera frase" class="frase-image">
             </div>
 
             <!-- Botón de sonido táctil móvil -->
@@ -122,12 +136,12 @@
                 <!-- BLOQUE HERO: foto de Maia como Moana + nombre + contador -->
                 <div class="invitation-hero">
                     <div class="hero-photo-container">
-                        <img class="hero-photo" src="./hero-tarjeta.jpg" alt="Maia como princesa de Moana en la playa">
+                        <img class="hero-photo" src="./img/hero-tarjeta.jpg" alt="Maia como princesa de Moana en la playa">
                         <div class="hero-photo-overlay"></div>
                     </div>
 
                     <!-- Nombre de Maia superpuesto sobre el borde inferior de la foto -->
-                    <img src="./imagen-sobre-el-hero.png" alt="Maia" class="hero-name-banner">
+                    <img src="./img/imagen-sobre-el-hero.png" alt="Maia" class="hero-name-banner">
 
                     <!-- CONTADOR REGRESIVO -->
                     <section class="hero-countdown-container" aria-labelledby="countdown-heading">
@@ -158,7 +172,7 @@
                 <div class="invitation-details-area">
                     <article class="invitation-info-card">
                         <header class="details-card-header">
-                            <span class="details-card-badge">Cumpleaños de Maia</span>
+                
                             <h2 class="details-title-display">Información del evento</h2>
                         </header>
 
@@ -186,7 +200,7 @@
                             </div>
                         </div>
 
-                        <p class="invitation-detail-quote">Acompañanos a celebrar los 4 años de la princesa Maia</p>
+                        <p class="invitation-detail-quote">Acompañanos a celebrar los 5 años de la princesa Maia</p>
 
                         <footer class="details-card-footer">
                             <div class="details-nav-actions">

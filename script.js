@@ -34,6 +34,11 @@ const loaderApertura = document.getElementById("loader-apertura");
 const btnAbrirInvitacion = document.getElementById("btn-abrir-invitacion");
 const btnFallbackApertura = document.getElementById("btn-fallback-apertura");
 
+// Audio de fondo (suena en loop durante toda la tarjeta)
+const audioFondo = document.getElementById("audio-fondo");
+const btnMusicaToggle = document.getElementById("btn-musica-toggle");
+const musicaIcon = document.getElementById("musica-icon");
+
 // Elementos de la Escena 2 (Historia)
 const progressBar = document.getElementById("progress-bar");
 const btnAudioToggle = document.getElementById("btn-audio-toggle");
@@ -83,6 +88,7 @@ function initOpeningScene() {
     const avanzarUnaVez = () => {
         if (avanzado) return;
         avanzado = true;
+        iniciarMusicaFondo();
         transitionToScene2();
     };
 
@@ -118,6 +124,33 @@ function initOpeningScene() {
 function transitionToScene2() {
     initScene2();
 }
+
+
+// ==========================================================================
+// MÚSICA DE FONDO (SUENA EN LOOP DESDE QUE SE ABRE LA INVITACIÓN)
+// ==========================================================================
+function iniciarMusicaFondo() {
+    audioFondo.volume = 0.55;
+    const playPromise = audioFondo.play();
+
+    if (playPromise !== undefined) {
+        playPromise.catch(error => {
+            console.warn("Reproducción de música de fondo bloqueada por el navegador:", error);
+        });
+    }
+
+    btnMusicaToggle.classList.remove("hidden");
+}
+
+btnMusicaToggle.addEventListener("click", () => {
+    if (audioFondo.paused) {
+        audioFondo.play();
+        musicaIcon.textContent = "🔊";
+    } else {
+        audioFondo.pause();
+        musicaIcon.textContent = "🔇";
+    }
+});
 
 
 // ==========================================================================

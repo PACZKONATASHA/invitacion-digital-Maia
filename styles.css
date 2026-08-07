@@ -113,14 +113,30 @@ video {
 .numero-cinco-flotante {
     position: absolute;
     left: 50%;
-    bottom: 26%;
-    width: 62%;
-    max-width: 380px;
+    bottom: 42%;
+    width: 26%;
+    max-width: 155px;
     transform: translateX(-50%) translateY(40px);
     z-index: 3;
     filter: drop-shadow(0 8px 18px rgba(0, 40, 60, 0.45));
     animation: aparecer-arriba 1.2s ease-out forwards;
     animation-delay: 0.3s;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Nombre "Maia" apareciendo sobre la arena, debajo del número */
+.nombre-maia-flotante {
+    position: absolute;
+    left: 50%;
+    bottom: 19%;
+    width: 68%;
+    max-width: 300px;
+    transform: translateX(-50%) translateY(40px);
+    z-index: 3;
+    filter: drop-shadow(0 8px 18px rgba(0, 40, 60, 0.45));
+    animation: aparecer-arriba 1.2s ease-out forwards;
+    animation-delay: 0.6s;
     opacity: 0;
     pointer-events: none;
 }
@@ -154,6 +170,37 @@ video {
 
 .video-overlay.subtler {
     background: radial-gradient(circle, rgba(0,0,0,0.02) 0%, rgba(0,0,0,0.15) 100%);
+}
+
+/* Botón global de música de fondo, visible en todas las escenas */
+.musica-btn {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    z-index: 200;
+    background: rgba(0, 0, 0, 0.45);
+    border: 1.5px solid rgba(255, 255, 255, 0.5);
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    transition: transform 0.2s, opacity 0.4s ease;
+}
+
+.musica-btn.hidden {
+    display: none !important;
+}
+
+.musica-btn:active {
+    transform: scale(0.9);
+}
+
+.musica-icon {
+    font-size: 1.15rem;
 }
 
 /* Botones de fallback o de error */
@@ -231,7 +278,7 @@ video {
 .apertura-interactive-container {
     position: absolute;
     left: 50%;
-    bottom: 17%;
+    bottom: 6%;
     transform: translateX(-50%);
     z-index: 4;
     width: 85%;
@@ -614,7 +661,7 @@ video {
     align-items: center;
     padding: 40px 18px 50px;
     width: 100%;
-    background-image: url('./fondo-tarjeta.jpg');
+    background-image: url('./img/fondo-tarjeta.jpg');
     background-size: cover;
     background-position: center top;
     background-repeat: no-repeat;
