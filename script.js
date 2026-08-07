@@ -158,13 +158,20 @@ function intentarReproducirMusica() {
     document.addEventListener(evt, intentarReproducirMusica, { passive: true });
 });
 
+// El ícono del botón siempre refleja el estado real del audio (no un estado fijo),
+// así nunca queda desincronizado si el navegador demora o bloquea el autoplay.
+audioFondo.addEventListener("play", () => {
+    musicaIcon.textContent = "🔊";
+});
+audioFondo.addEventListener("pause", () => {
+    musicaIcon.textContent = "🔇";
+});
+
 btnMusicaToggle.addEventListener("click", () => {
     if (audioFondo.paused) {
         audioFondo.play();
-        musicaIcon.textContent = "🔊";
     } else {
         audioFondo.pause();
-        musicaIcon.textContent = "🔇";
     }
 });
 

@@ -128,7 +128,7 @@ video {
 /* Nombre "Maia" apareciendo de repente bien grande, al lado de la gallina (a su altura), sin taparla */
 .nombre-maia-flotante {
     position: absolute;
-    left: 74%;
+    left: 68%;
     bottom: 12%;
     width: 52%;
     max-width: 250px;
