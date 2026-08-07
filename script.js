@@ -34,8 +34,10 @@ const loaderApertura = document.getElementById("loader-apertura");
 const btnAbrirInvitacion = document.getElementById("btn-abrir-invitacion");
 const btnFallbackApertura = document.getElementById("btn-fallback-apertura");
 
-// Audio de fondo (suena en loop durante toda la tarjeta, sin botón para apagarla)
+// Audio de fondo (suena en loop durante toda la tarjeta)
 const audioFondo = document.getElementById("audio-fondo");
+const btnMusicaToggle = document.getElementById("btn-musica-toggle");
+const musicaIcon = document.getElementById("musica-icon");
 
 // Elementos de la Escena 2 (Historia)
 const progressBar = document.getElementById("progress-bar");
@@ -147,9 +149,43 @@ function iniciarMusicaFondo() {
             });
         }
     }
+    btnMusicaToggle.classList.remove("hidden");
+}
+
+// ==========================================================================
+// REFUERZO DE VOLUMEN (WEB AUDIO API)
+// ==========================================================================
+// El atributo .volume de <video>/<audio> tiene un tope duro de 1.0 (100%):
+// el navegador no permite pasarse de ahí. Para que suene todavía más fuerte,
+// se reenruta el audio a través de la Web Audio API con un nodo de ganancia
+// por encima de 1.0. Esto amplifica la señal más allá del 100% nativo (a
+// costa de algo de distorsión si el archivo ya venía grabado fuerte, lo cual
+// es el trade-off buscado: la prioridad es que se escuche lo más fuerte
+// posible). Como todo AudioContext, necesita una interacción del usuario
+// para arrancar, así que se conecta recién en la primera interacción.
+let audioCtx = null;
+let volumeBoostConectado = false;
+
+function activarRefuerzoDeVolumen() {
+    if (volumeBoostConectado) return;
+    try {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        audioCtx = new AudioContextClass();
+        const source = audioCtx.createMediaElementSource(audioFondo);
+        const gainNode = audioCtx.createGain();
+        gainNode.gain.value = 2.5;
+        source.connect(gainNode).connect(audioCtx.destination);
+        volumeBoostConectado = true;
+    } catch (error) {
+        console.warn("No se pudo aplicar el refuerzo de volumen:", error);
+    }
 }
 
 function activarSonido() {
+    activarRefuerzoDeVolumen();
+    if (audioCtx && audioCtx.state === "suspended") {
+        audioCtx.resume().catch(() => {});
+    }
     if (audioFondo.paused) {
         audioFondo.play().catch(error => {
             console.warn("Reproducción de música bloqueada, se reintentará con la próxima interacción:", error);
@@ -159,10 +195,28 @@ function activarSonido() {
 }
 
 // Se activa el sonido en cuanto ocurra CUALQUIER interacción en la página
-// (no hace falta tocar un botón específico). No hay botón para volver a
-// silenciarla: la música suena durante toda la tarjeta.
+// (no hace falta tocar un botón específico).
 ["pointerdown", "click", "touchend", "keydown"].forEach(evt => {
     document.addEventListener(evt, activarSonido, { passive: true });
+});
+
+// El ícono del botón siempre refleja el estado real del audio: suena solo si
+// no está pausado NI silenciado.
+function actualizarIconoMusica() {
+    musicaIcon.textContent = (audioFondo.paused || audioFondo.muted) ? "🔇" : "🔊";
+}
+audioFondo.addEventListener("play", actualizarIconoMusica);
+audioFondo.addEventListener("pause", actualizarIconoMusica);
+audioFondo.addEventListener("volumechange", actualizarIconoMusica);
+
+btnMusicaToggle.addEventListener("click", () => {
+    activarRefuerzoDeVolumen();
+    if (audioFondo.paused) {
+        audioFondo.muted = false;
+        audioFondo.play().catch(() => {});
+    } else {
+        audioFondo.muted = !audioFondo.muted;
+    }
 });
 
 

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Invitación al Cumpleaños de Maia</title>
-    <link rel="stylesheet" href="styles.css?v=4">
+    <link rel="stylesheet" href="styles.css?v=5">
 </head>
 <body>
 
@@ -18,6 +18,11 @@
              sonido con la primera interacción del usuario en la página (ver script.js). -->
         <video id="audio-fondo" class="audio-fondo-oculto" src="./img/cancion-fondo.mp4"
                muted autoplay loop playsinline preload="auto" aria-hidden="true"></video>
+
+        <!-- Botón global de silenciar/activar música de fondo -->
+        <button id="btn-musica-toggle" class="musica-btn hidden" type="button" aria-label="Silenciar o activar la música de fondo">
+            <span id="musica-icon" class="musica-icon">🔊</span>
+        </button>
 
         <!-- ======================================== -->
         <!-- ESCENA 1 — VIDEO APERTURA -->
@@ -133,14 +138,12 @@
             <!-- Contenedor desplazable de la tarjeta final -->
             <div class="scroll-container">
 
-                <!-- BLOQUE HERO: foto de Maia como Moana + nombre + contador -->
+                <!-- BLOQUE HERO: nombre + contador (sin foto) -->
                 <div class="invitation-hero">
                     <div class="hero-photo-container">
-                        <img class="hero-photo" src="./img/hero-tarjeta.jpg" alt="Maia como princesa de Moana en la playa">
-                        <div class="hero-photo-overlay"></div>
                     </div>
 
-                    <!-- Nombre de Maia superpuesto sobre el borde inferior de la foto -->
+                    <!-- Nombre de Maia superpuesto sobre el borde inferior del hero -->
                     <img src="./img/imagen-sobre-el-hero.png" alt="Maia" class="hero-name-banner">
 
                     <!-- CONTADOR REGRESIVO -->
@@ -295,6 +298,6 @@
 
     </main>
 
-    <script src="script.js?v=4"></script>
+    <script src="script.js?v=5"></script>
 </body>
 </html>
