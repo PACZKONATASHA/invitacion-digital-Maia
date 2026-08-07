@@ -129,18 +129,32 @@ function transitionToScene2() {
 // ==========================================================================
 // MÚSICA DE FONDO (SUENA EN LOOP DESDE QUE SE ABRE LA INVITACIÓN EN LA ESCENA 1)
 // ==========================================================================
+let aperturaConfirmada = false; // true en cuanto el usuario toca "Abrir invitación"
+
 function iniciarMusicaFondo() {
+    aperturaConfirmada = true;
     audioFondo.volume = 0.55;
-    const playPromise = audioFondo.play();
-
-    if (playPromise !== undefined) {
-        playPromise.catch(error => {
-            console.warn("Reproducción de música de fondo bloqueada por el navegador:", error);
-        });
-    }
-
+    audioFondo.currentTime = 0;
+    intentarReproducirMusica();
     btnMusicaToggle.classList.remove("hidden");
 }
+
+function intentarReproducirMusica() {
+    if (!aperturaConfirmada || !audioFondo.paused) return;
+    const playPromise = audioFondo.play();
+    if (playPromise !== undefined) {
+        playPromise.catch(error => {
+            console.warn("Reproducción de música de fondo bloqueada, se reintentará con la próxima interacción:", error);
+        });
+    }
+}
+
+// Red de seguridad: si el navegador bloqueó el primer intento de reproducción
+// (por ejemplo dentro de vistas previas embebidas con políticas de autoplay más estrictas),
+// se reintenta apenas ocurra cualquier otra interacción del usuario en la página.
+["pointerdown", "click", "touchend", "keydown"].forEach(evt => {
+    document.addEventListener(evt, intentarReproducirMusica, { passive: true });
+});
 
 btnMusicaToggle.addEventListener("click", () => {
     if (audioFondo.paused) {
