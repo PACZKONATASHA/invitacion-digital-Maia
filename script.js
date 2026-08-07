@@ -137,7 +137,7 @@ function transitionToScene2() {
 // silenciado sí está siempre permitido) y activar el sonido apenas ocurra
 // cualquier interacción, sin importar dónde se toque.
 function iniciarMusicaFondo() {
-    audioFondo.volume = 0.55;
+    audioFondo.volume = 1;
     if (audioFondo.paused) {
         audioFondo.muted = true;
         const playPromise = audioFondo.play();
