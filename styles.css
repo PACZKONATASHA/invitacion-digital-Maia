@@ -231,7 +231,7 @@ video {
 .apertura-interactive-container {
     position: absolute;
     left: 50%;
-    bottom: 5%;
+    bottom: 17%;
     transform: translateX(-50%);
     z-index: 4;
     width: 85%;
@@ -242,9 +242,9 @@ video {
 
 .btn-apertura {
     position: relative;
-    background: linear-gradient(135deg, rgba(134, 214, 226, 0.5) 0%, rgba(29, 161, 179, 0.35) 100%);
+    background: linear-gradient(135deg, rgba(86, 190, 214, 0.75) 0%, rgba(21, 121, 136, 0.65) 100%);
     backdrop-filter: blur(2px);
-    border: 1px solid rgba(255, 255, 255, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.6);
     color: var(--color-blanco);
     padding: 10px 26px;
     font-family: var(--font-principal);
@@ -253,7 +253,7 @@ video {
     letter-spacing: 0.5px;
     border-radius: 30px;
     cursor: pointer;
-    box-shadow: 0 2px 12px rgba(134, 214, 226, 0.3);
+    box-shadow: 0 2px 14px rgba(29, 161, 179, 0.45);
     text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
     opacity: 0;
     transform: scale(0.92);
