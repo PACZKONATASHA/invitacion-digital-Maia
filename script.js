@@ -137,7 +137,6 @@ let aperturaConfirmada = false; // true en cuanto el usuario toca "Abrir invitac
 function iniciarMusicaFondo() {
     aperturaConfirmada = true;
     audioFondo.volume = 0.55;
-    audioFondo.currentTime = 0;
     intentarReproducirMusica();
     btnMusicaToggle.classList.remove("hidden");
 }
