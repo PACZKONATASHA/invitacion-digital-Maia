@@ -82,10 +82,12 @@ const esIOSoSafari = (() => {
     return esIOS || esSafari;
 })();
 
-// Volumen de la música: al 100% normalmente, y bajita mientras corre el video
-// de la historia para que se escuchen las dos cosas sin taparse.
+// La música va SIEMPRE al 100%, de punta a punta de la invitación: nunca baja,
+// ni siquiera mientras corre el video de la historia.
+// (Dato: en iPhone esta propiedad ni siquiera se aplica. Apple no deja controlar
+// el volumen por JavaScript, siempre manda el control físico del teléfono. Así
+// que allá la canción ya sale al máximo del equipo; esto rige en Android y PC.)
 const VOLUMEN_MUSICA = 1;
-const VOLUMEN_MUSICA_DURANTE_VIDEO = 0.18;
 
 
 // ==========================================================================
@@ -254,21 +256,21 @@ function activarSonido() {
 }
 
 // ==========================================================================
-// "DUCKING": BAJAR LA MÚSICA MIENTRAS CORRE EL VIDEO DE LA HISTORIA
+// LA MÚSICA SIEMPRE AL MÁXIMO
 // ==========================================================================
-// El video de la historia trae su propia pista de audio. Si la canción sigue a
-// todo volumen se pisan las dos, y en iPhone además compiten por la sesión de
-// audio del sistema (que es la razón por la que uno de los dos se cortaba).
-// Bajamos la música mientras dura el video y la devolvemos al final.
-function bajarMusicaParaVideo() {
-    audioFondo.volume = VOLUMEN_MUSICA_DURANTE_VIDEO;
-}
+// Red de seguridad: si algo llegara a bajar el volumen, lo devolvemos al 100%.
+// No genera bucle porque asignar el mismo valor no vuelve a disparar el evento.
+audioFondo.addEventListener("volumechange", () => {
+    if (audioFondo.volume < VOLUMEN_MUSICA) {
+        audioFondo.volume = VOLUMEN_MUSICA;
+    }
+});
 
-function restaurarMusica() {
+// En iPhone la reproducción del video de la historia puede interrumpir la música,
+// porque el sistema le da la sesión de audio a un elemento por vez. Si quedó
+// pausada sin que el usuario la haya silenciado a mano, la retomamos.
+function asegurarMusicaSonando() {
     audioFondo.volume = VOLUMEN_MUSICA;
-    // En iPhone la reproducción del video puede haber interrumpido la música
-    // (el sistema le da la sesión de audio a un elemento por vez). Si quedó
-    // pausada sin que el usuario la silenciara a mano, la retomamos.
     if (audioFondo.paused && !audioFondo.muted) {
         audioFondo.play().catch(() => {});
     }
@@ -300,9 +302,8 @@ btnMusicaToggle.addEventListener("click", () => {
 function initScene2() {
     showScene(sceneHistoria);
 
-    // Bajamos la música ANTES de arrancar el video, no después: en iPhone los dos
-    // elementos pelean por la sesión de audio del sistema y el que pierde se traba.
-    bajarMusicaParaVideo();
+    // La canción sigue al 100% también durante el video de la historia.
+    asegurarMusicaSonando();
 
     // Intentamos reproducir con sonido gracias a la interacción previa en "ABRIR INVITACIÓN"
     videoHistoria.muted = false;
@@ -418,7 +419,7 @@ function syncSubtitles(currentTime) {
 
 function transitionToScene3() {
     videoHistoria.pause();
-    restaurarMusica();
+    asegurarMusicaSonando();
     initScene3();
 }
 
