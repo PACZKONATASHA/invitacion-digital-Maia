@@ -383,6 +383,15 @@ function initScene2() {
     });
 }
 
+// Momento (en segundos) en que entra cada frase sobre el video de la historia.
+// El video nuevo dura ~21,6s contra los ~12,4s del anterior, así que las tres
+// frases se repartieron de nuevo en tercios; con los tiempos viejos la tercera
+// quedaba 13 segundos clavada en pantalla.
+// Si querés calzarlas con momentos puntuales del video, cambiá solo estos números.
+const FRASE_1_DESDE = 0.8;
+const FRASE_2_DESDE = 7.5;
+const FRASE_3_DESDE = 14.5;
+
 /**
  * Sincroniza la visibilidad de las imágenes de frases de acuerdo al tiempo del video.
  */
@@ -390,26 +399,23 @@ function syncSubtitles(currentTime) {
     const frase1Container = document.getElementById("frase-1-container");
     const frase2Container = document.getElementById("frase-2-container");
     const frase3Container = document.getElementById("frase-3-container");
-    
-    // Frase 1: de 0.5s a 4.5s
-    if (currentTime >= 0.5 && currentTime < 4.5) {
+
+    if (currentTime >= FRASE_1_DESDE && currentTime < FRASE_2_DESDE) {
         frase1Container.classList.remove("hidden");
         frase2Container.classList.add("hidden");
         frase3Container.classList.add("hidden");
     }
-    // Frase 2: de 4.5s a 8.5s
-    else if (currentTime >= 4.5 && currentTime < 8.5) {
+    else if (currentTime >= FRASE_2_DESDE && currentTime < FRASE_3_DESDE) {
         frase1Container.classList.add("hidden");
         frase2Container.classList.remove("hidden");
         frase3Container.classList.add("hidden");
     }
-    // Frase 3: de 8.5s en adelante
-    else if (currentTime >= 8.5) {
+    else if (currentTime >= FRASE_3_DESDE) {
         frase1Container.classList.add("hidden");
         frase2Container.classList.add("hidden");
         frase3Container.classList.remove("hidden");
     }
-    // Antes de las frases
+    // Antes de que entre la primera frase
     else {
         frase1Container.classList.add("hidden");
         frase2Container.classList.add("hidden");
