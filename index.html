@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Invitación al Cumpleaños de Maia</title>
-    <link rel="stylesheet" href="styles.css?v=12">
+    <link rel="stylesheet" href="styles.css?v=13">
 </head>
 <body>
 
@@ -99,6 +99,15 @@
                    src="./img/video_moana_2_web.mp4"
                    aria-hidden="true">
             </video>
+
+            <!-- Los últimos ~2 segundos del video son negro puro. En vez de ese negro
+                 se funde esta foto de Maia, y la tercera frase queda encima de ella.
+                 El src va con %20 porque el archivo tiene espacios en el nombre. -->
+            <img id="foto-final-video"
+                 class="foto-final-video"
+                 src="./img/fondo%20del%20video.jpg"
+                 alt="Maia vestida de Moana"
+                 aria-hidden="true">
 
             <!-- Capa de sombra para lecturas de subtítulos -->
             <div class="video-overlay subtler"></div>
@@ -309,6 +318,6 @@
 
     </main>
 
-    <script src="script.js?v=12"></script>
+    <script src="script.js?v=13"></script>
 </body>
 </html>
