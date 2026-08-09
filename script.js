@@ -68,6 +68,25 @@ const whatsappErrorMsg = document.getElementById("whatsapp-error-msg");
 
 let countdownInterval = null;
 
+// ==========================================================================
+// DETECCIÓN DE iPhone / iPad / Safari
+// ==========================================================================
+// Safari (sobre todo en iPhone) aplica reglas de reproducción mucho más
+// estrictas que Chrome. Varias cosas que en Android funcionan perfecto ahí
+// dejan el video trabado, así que en esos equipos tomamos el camino seguro.
+const esIOSoSafari = (() => {
+    const ua = navigator.userAgent;
+    const esIOS = /iPad|iPhone|iPod/.test(ua) ||
+                  (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+    const esSafari = /^((?!chrome|android|crios|fxios|edgios).)*safari/i.test(ua);
+    return esIOS || esSafari;
+})();
+
+// Volumen de la música: al 100% normalmente, y bajita mientras corre el video
+// de la historia para que se escuchen las dos cosas sin taparse.
+const VOLUMEN_MUSICA = 1;
+const VOLUMEN_MUSICA_DURANTE_VIDEO = 0.18;
+
 
 // ==========================================================================
 // CONTROLADOR DE TRANSICIONES ENTRE ESCENAS
@@ -88,8 +107,13 @@ function initOpeningScene() {
     const avanzarUnaVez = () => {
         if (avanzado) return;
         avanzado = true;
-        audioFondo.currentTime = 0;
-        activarSonido();
+        // Cada paso va aislado en su propio try/catch. Antes, si la primera línea
+        // fallaba (Safari puede lanzar InvalidStateError al tocar currentTime),
+        // ya se había marcado avanzado = true y NUNCA se llegaba a cambiar de
+        // escena: la invitación quedaba trabada para siempre en la apertura y
+        // volver a tocar el botón no hacía absolutamente nada.
+        try { reiniciarMusicaDesdeCero(); } catch (e) { console.warn("No se pudo rebobinar la música:", e); }
+        try { activarSonido(); } catch (e) { console.warn("No se pudo activar la música:", e); }
         transitionToScene2();
     };
 
@@ -135,22 +159,36 @@ function transitionToScene2() {
 // ==========================================================================
 // Los navegadores nunca permiten arrancar audio CON sonido sin que haya habido
 // antes alguna interacción del usuario con la página (política anti-spam de todos
-// los navegadores, no depende de este sitio). Por eso: la música arranca
-// silenciada apenas carga la imagen de apertura (el autoplay silenciado sí
-// está siempre permitido) y el sonido se activa al 100% justo cuando se toca
-// el botón "ABRIR INVITACIÓN" (ver avanzarUnaVez en initOpeningScene).
+// los navegadores, no depende de este sitio). Por eso: mientras se ve la imagen
+// de apertura solo se PRECARGA la canción, y la reproducción arranca ya con
+// sonido al tocar "ABRIR INVITACIÓN" (ver avanzarUnaVez en initOpeningScene).
+//
+// Antes se intentaba arrancarla silenciada y después des-silenciarla. Eso andaba
+// en Chrome pero rompía en iPhone, porque Safari pausa el elemento si se lo
+// des-silencia con el play() todavía pendiente. Ahora nunca hay ese cambio de
+// estado: se reproduce con sonido desde el primer instante, dentro del gesto.
 function iniciarMusicaFondo() {
-    audioFondo.volume = 1;
-    if (audioFondo.paused) {
-        audioFondo.muted = true;
-        const playPromise = audioFondo.play();
-        if (playPromise !== undefined) {
-            playPromise.catch(error => {
-                console.warn("No se pudo iniciar la música ni siquiera silenciada:", error);
-            });
-        }
+    // Ya NO se intenta arrancar la música silenciada acá. En iPhone eso no servía
+    // de nada (Safari pausa el audio silenciado que no está visible) y encima
+    // obligaba después a hacer el cambio de silenciado -> con sonido, que es
+    // justamente lo que iOS castiga pausando el elemento.
+    // Ahora solo se precarga el archivo para que al tocar el botón arranque ya.
+    audioFondo.volume = VOLUMEN_MUSICA;
+    // Solo forzamos la carga si el navegador todavía no empezó por su cuenta:
+    // llamar a load() cuando ya venía descargando tira a la basura lo bajado.
+    if (audioFondo.networkState === HTMLMediaElement.NETWORK_EMPTY || audioFondo.readyState === 0) {
+        try { audioFondo.load(); } catch (e) { console.warn("No se pudo precargar la música:", e); }
     }
     btnMusicaToggle.classList.remove("hidden");
+}
+
+// Safari lanza InvalidStateError si se toca currentTime antes de tener metadata,
+// y aunque no lo lance, el seek dispara un pedido de red nuevo que en el celular
+// deja la canción colgada. Por eso solo rebobinamos si ya hay datos cargados.
+function reiniciarMusicaDesdeCero() {
+    if (audioFondo.readyState >= 1 && audioFondo.currentTime > 0.05) {
+        audioFondo.currentTime = 0;
+    }
 }
 
 // ==========================================================================
@@ -169,6 +207,15 @@ let volumeBoostConectado = false;
 
 function activarRefuerzoDeVolumen() {
     if (volumeBoostConectado) return;
+    // En iPhone/Safari NO se usa Web Audio. createMediaElementSource() se queda
+    // con la salida de audio del elemento, y en WebKit es una causa clásica de
+    // silencio total: si el AudioContext no queda en "running" no se escucha
+    // absolutamente nada. Preferimos el volumen nativo al 100% funcionando
+    // siempre, antes que un refuerzo que puede dejar la canción muda.
+    if (esIOSoSafari) {
+        volumeBoostConectado = true;
+        return;
+    }
     try {
         const AudioContextClass = window.AudioContext || window.webkitAudioContext;
         audioCtx = new AudioContextClass();
@@ -187,12 +234,44 @@ function activarSonido() {
     if (audioCtx && audioCtx.state === "suspended") {
         audioCtx.resume().catch(() => {});
     }
-    if (audioFondo.paused) {
-        audioFondo.play().catch(error => {
-            console.warn("Reproducción de música bloqueada, se reintentará con la próxima interacción:", error);
-        });
-    }
+
+    // ORDEN IMPORTANTE: primero dejamos el elemento con sonido y recién después
+    // llamamos a play(). Antes se hacía al revés (play() y enseguida muted=false)
+    // y en iOS eso es fatal: Apple documenta que si un elemento se des-silencia
+    // mientras el play() todavía está pendiente, WebKit lo pausa. Resultado: en
+    // iPhone la música arrancaba y se cortaba sola al instante.
     audioFondo.muted = false;
+    audioFondo.volume = VOLUMEN_MUSICA;
+
+    if (audioFondo.paused) {
+        const playPromise = audioFondo.play();
+        if (playPromise !== undefined) {
+            playPromise.catch(error => {
+                console.warn("Reproducción de música bloqueada, se reintentará con la próxima interacción:", error);
+            });
+        }
+    }
+}
+
+// ==========================================================================
+// "DUCKING": BAJAR LA MÚSICA MIENTRAS CORRE EL VIDEO DE LA HISTORIA
+// ==========================================================================
+// El video de la historia trae su propia pista de audio. Si la canción sigue a
+// todo volumen se pisan las dos, y en iPhone además compiten por la sesión de
+// audio del sistema (que es la razón por la que uno de los dos se cortaba).
+// Bajamos la música mientras dura el video y la devolvemos al final.
+function bajarMusicaParaVideo() {
+    audioFondo.volume = VOLUMEN_MUSICA_DURANTE_VIDEO;
+}
+
+function restaurarMusica() {
+    audioFondo.volume = VOLUMEN_MUSICA;
+    // En iPhone la reproducción del video puede haber interrumpido la música
+    // (el sistema le da la sesión de audio a un elemento por vez). Si quedó
+    // pausada sin que el usuario la silenciara a mano, la retomamos.
+    if (audioFondo.paused && !audioFondo.muted) {
+        audioFondo.play().catch(() => {});
+    }
 }
 
 // El ícono del botón siempre refleja el estado real del audio: suena solo si
@@ -221,6 +300,10 @@ btnMusicaToggle.addEventListener("click", () => {
 function initScene2() {
     showScene(sceneHistoria);
 
+    // Bajamos la música ANTES de arrancar el video, no después: en iPhone los dos
+    // elementos pelean por la sesión de audio del sistema y el que pierde se traba.
+    bajarMusicaParaVideo();
+
     // Intentamos reproducir con sonido gracias a la interacción previa en "ABRIR INVITACIÓN"
     videoHistoria.muted = false;
     audioIcon.textContent = "🔊";
@@ -239,6 +322,24 @@ function initScene2() {
             });
         });
     }
+
+    // SALVAVIDAS: si a los 6 segundos el video sigue sin avanzar (conexión lenta,
+    // iPhone que no le da decodificador, modo de bajo consumo, navegador dentro de
+    // WhatsApp...), mostramos el botón para pasar igual a la tarjeta. Nadie se queda
+    // mirando una pantalla trabada sin salida.
+    let videoArranco = false;
+    const watchdogHistoria = setTimeout(() => {
+        if (!videoArranco) {
+            console.warn("El video de la historia no arrancó a tiempo; se ofrece el botón de salida.");
+            bntFallbackHistoria.classList.remove("hidden");
+        }
+    }, 6000);
+    videoHistoria.addEventListener("timeupdate", () => {
+        if (!videoArranco && videoHistoria.currentTime > 0.2) {
+            videoArranco = true;
+            clearTimeout(watchdogHistoria);
+        }
+    });
 
     // Actualización de la barra de progreso e hilos subtítulos mediante timeupdate
     videoHistoria.addEventListener("timeupdate", () => {
@@ -317,6 +418,7 @@ function syncSubtitles(currentTime) {
 
 function transitionToScene3() {
     videoHistoria.pause();
+    restaurarMusica();
     initScene3();
 }
 

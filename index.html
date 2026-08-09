@@ -4,20 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Invitación al Cumpleaños de Maia</title>
-    <link rel="stylesheet" href="styles.css?v=8">
+    <link rel="stylesheet" href="styles.css?v=9">
 </head>
 <body>
 
     <!-- CONTENEDOR PRINCIPAL -->
     <main class="app-container">
 
-        <!-- Audio de fondo: se usa un <video> silenciado en vez de <audio> porque los
-             navegadores permiten el autoplay silenciado de video sin ninguna interacción
-             previa del usuario (no así con <audio>). El archivo es la misma canción con
-             una pista de video negra de 2x2px. Arranca ya en la escena 1 y se activa el
-             sonido con la primera interacción del usuario en la página (ver script.js). -->
-        <video id="audio-fondo" class="audio-fondo-oculto" src="./img/cancion-fondo.mp4"
-               muted autoplay loop playsinline preload="auto" aria-hidden="true"></video>
+        <!-- Audio de fondo. IMPORTANTE: acá va un <audio> real, NO un <video> oculto.
+             Safari de iPhone tiene dos reglas documentadas por Apple que rompían la
+             versión anterior (que usaba un <video> de 2x2px escondido):
+               1) un video con autoplay solo arranca si está VISIBLE en pantalla, y lo
+                  pausa apenas deja de estarlo (el nuestro era de 1px y opacity:0);
+               2) si un video se des-silencia sin gesto del usuario, iOS lo pausa.
+             Además el iPhone reserva muy pocos decodificadores de video a la vez, así
+             que ese <video> oculto le robaba el decodificador al video de la historia
+             y por eso "se trababa" y nunca sonaban los dos juntos.
+             Un <audio> no usa decodificador de video ni depende de la visibilidad.
+             La música arranca con el toque en "ABRIR INVITACIÓN" (ver script.js). -->
+        <audio id="audio-fondo" class="audio-fondo-oculto"
+               loop preload="auto" aria-hidden="true">
+            <source src="./img/cancion-fondo.mp3" type="audio/mpeg">
+            <source src="./img/cancion-fondo.mp4" type="audio/mp4">
+        </audio>
 
         <!-- Botón global de silenciar/activar música de fondo -->
         <button id="btn-musica-toggle" class="musica-btn hidden" type="button" aria-label="Silenciar o activar la música de fondo">
@@ -80,11 +89,15 @@
                 <div id="progress-bar" class="progress-bar"></div>
             </div>
 
-            <video id="video-historia" 
-                   playsinline 
-                   preload="metadata" 
+            <!-- playsinline + webkit-playsinline: sin esto el iPhone abre el video en
+                 pantalla completa con sus propios controles y corta la experiencia.
+                 preload="auto" para que iOS ya tenga buffer cuando toca reproducir
+                 (con "metadata" el iPhone llega sin datos y el video se queda trabado). -->
+            <video id="video-historia"
+                   playsinline
+                   webkit-playsinline
+                   preload="auto"
                    src="./img/segundo-video.mp4"
-                   type="video/mp4"
                    aria-hidden="true">
             </video>
 
@@ -297,6 +310,6 @@
 
     </main>
 
-    <script src="script.js?v=8"></script>
+    <script src="script.js?v=9"></script>
 </body>
 </html>
