@@ -176,27 +176,6 @@ video {
     background: radial-gradient(circle, rgba(0,0,0,0.02) 0%, rgba(0,0,0,0.15) 100%);
 }
 
-/* Foto de Maia sobre el tramo final del video. El video se va a negro en sus
-   últimos ~2 segundos, así que la foto entra fundida justo ahí y tapa ese negro.
-   z-index 3: por encima del video (1) y su sombra (2), por debajo de las frases (5). */
-.foto-final-video {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-    z-index: 3;
-    opacity: 0;
-    transition: opacity 0.9s ease-in-out;
-    pointer-events: none;
-}
-
-.foto-final-video.visible {
-    opacity: 1;
-}
-
 /* Video que transporta la música de fondo: invisible pero renderizado (display:none
    haría que algunos navegadores lo pausen por no estar "visible"). */
 .audio-fondo-oculto {
@@ -706,6 +685,16 @@ video {
     letter-spacing: 1.5px;
     margin-top: 10px;
     font-weight: bold;
+}
+
+/* Faltaba esta regla: sin ella, ".hidden" en el mensaje "¡Hoy es el gran día!"
+   no hacía nada (ninguna otra regla del CSS lo cubre) y el mensaje quedaba
+   siempre visible, superpuesto con los números del contador. El día de la
+   fiesta el JS le saca "hidden" a este mensaje y se lo pone al contador
+   (ver startCountdown en script.js), así que el resultado final es: solo la
+   foto y el mensaje, sin los números. */
+.countdown-past-msg.hidden {
+    display: none;
 }
 
 /* ==========================================================================

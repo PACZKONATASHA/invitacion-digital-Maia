@@ -41,7 +41,7 @@ const musicaIcon = document.getElementById("musica-icon");
 
 // Segundo del video de la historia en el que arranca la reproducción (se
 // saltea el tramo inicial de solo olas, sin acción).
-const VIDEO_HISTORIA_INICIO = 2;
+const VIDEO_HISTORIA_INICIO = 4;
 
 // Elementos de la Escena 2 (Historia)
 const progressBar = document.getElementById("progress-bar");
@@ -372,7 +372,6 @@ function initScene2() {
             progressBar.style.width = `${pct}%`;
         }
         syncSubtitles(videoHistoria.currentTime);
-        syncFotoFinal(videoHistoria.currentTime);
     });
 
     // Control de audio manual (botón mute/unmute interactivo)
@@ -416,11 +415,6 @@ const FRASE_1_DESDE = 0.8;
 const FRASE_2_DESDE = 7.5;
 const FRASE_3_DESDE = 14.5;
 
-// El video se va a negro puro en sus últimos ~2 segundos (de 19,6s al final).
-// La foto de Maia entra un poco antes, para que el fundido termine justo cuando
-// el video ya se apagó del todo y ese negro nunca llegue a verse.
-const FOTO_FINAL_DESDE = 19;
-
 /**
  * Sincroniza la visibilidad de las imágenes de frases de acuerdo al tiempo del video.
  */
@@ -450,16 +444,6 @@ function syncSubtitles(currentTime) {
         frase2Container.classList.add("hidden");
         frase3Container.classList.add("hidden");
     }
-}
-
-/**
- * Funde la foto de Maia sobre el tramo final del video, para que no se vea el
- * negro con el que termina el archivo.
- */
-function syncFotoFinal(currentTime) {
-    const foto = document.getElementById("foto-final-video");
-    if (!foto) return;
-    foto.classList.toggle("visible", currentTime >= FOTO_FINAL_DESDE);
 }
 
 function transitionToScene3() {
