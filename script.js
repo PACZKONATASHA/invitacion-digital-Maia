@@ -39,6 +39,10 @@ const audioFondo = document.getElementById("audio-fondo");
 const btnMusicaToggle = document.getElementById("btn-musica-toggle");
 const musicaIcon = document.getElementById("musica-icon");
 
+// Segundo del video de la historia en el que arranca la reproducción (se
+// saltea el tramo inicial de solo olas, sin acción).
+const VIDEO_HISTORIA_INICIO = 2;
+
 // Elementos de la Escena 2 (Historia)
 const progressBar = document.getElementById("progress-bar");
 const btnAudioToggle = document.getElementById("btn-audio-toggle");
@@ -308,6 +312,25 @@ function initScene2() {
     // Intentamos reproducir con sonido gracias a la interacción previa en "ABRIR INVITACIÓN"
     videoHistoria.muted = false;
     audioIcon.textContent = "🔊";
+
+    // El video arranca salteando el inicio (segundo 0 al 2 son olas, sin nada
+    // relevante) y va directo al segundo VIDEO_HISTORIA_INICIO. Si para cuando
+    // llegamos acá el navegador ya tiene la metadata (lo normal: el video viene
+    // precargando con preload="auto" desde que se abrió la página), el salto se
+    // hace antes de reproducir; si no, se espera a que llegue la metadata para
+    // no llegar a mostrar ni un instante el arranque desde 0.
+    const saltarAlInicioDeseado = () => {
+        try {
+            videoHistoria.currentTime = VIDEO_HISTORIA_INICIO;
+        } catch (e) {
+            console.warn("No se pudo saltar el inicio del video:", e);
+        }
+    };
+    if (videoHistoria.readyState >= 1) {
+        saltarAlInicioDeseado();
+    } else {
+        videoHistoria.addEventListener("loadedmetadata", saltarAlInicioDeseado, { once: true });
+    }
 
     let playPromise = videoHistoria.play();
 
